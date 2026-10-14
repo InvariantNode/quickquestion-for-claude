@@ -1,0 +1,44 @@
+<idea-plugin>
+    <id>quickquestion.claude</id>
+    <name>QuickQuestion for Claude</name>
+    <vendor>TBD</vendor>
+
+    <description><![CDATA[
+        <p>Select code in the editor and ask Claude a quick question about it, without leaving your file.</p>
+        <ul>
+            <li><b>Ask Claude</b> from the floating code toolbar, the editor context menu, or <code>Ctrl+Alt+K</code>.</li>
+            <li>A movable, resizable popup holds a throwaway multi-turn chat that stays open while you read the code.</li>
+            <li>Move the live chat to a sidebar tab with one click.</li>
+            <li>Streamed Markdown replies with syntax-highlighted code; <code>Foo.kt:42</code> style references open the file at that line.</li>
+        </ul>
+        <p><b>Requirements:</b> the <a href="https://docs.claude.com/en/docs/claude-code">Claude Code CLI</a> must be installed and
+        signed in. The plugin starts it in headless mode, one process per chat.</p>
+        <p><b>Data:</b> the selected code and your questions are sent to Anthropic through the Claude Code CLI.
+        Claude can also read other files in the project (read-only: Read, Grep, Glob) to answer.</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <ul>
+            <li>0.1.0: Initial version. Ask Claude about selected code in a popup, move the chat to a sidebar tab.</li>
+        </ul>
+    ]]></change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable parentId="tools" instance="com.example.qqclaudecode.QQConfigurable"
+                                 id="quickquestion.claude.settings" displayName="QuickQuestion for Claude"/>
+        <toolWindow id="QuickQuestion for Claude" anchor="right" canCloseContents="true" icon="/icons/ask.svg"
+                    factoryClass="com.example.qqclaudecode.ChatToolWindowFactory" doNotActivateOnStart="true"/>
+        <notificationGroup id="QuickQuestion for Claude" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <action id="QuickQuestion.Ask" class="com.example.qqclaudecode.AskClaudeAction"
+                text="Ask Claude" description="Ask Claude about the selected code" icon="/icons/ask.svg">
+            <add-to-group group-id="Floating.CodeToolbar" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt K"/>
+        </action>
+    </actions>
+</idea-plugin>

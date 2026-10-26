@@ -22,6 +22,7 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>0.1.1: New plugin icon that matches the in-IDE icon.</li>
             <li>0.1.0: Initial version. Ask Claude about selected code in a popup, move the chat to a sidebar tab.</li>
         </ul>
     ]]></change-notes>

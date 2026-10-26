@@ -54,6 +54,11 @@ The first upload to the Marketplace is done by hand on the plugin site; later re
 
 _Independent plugin, not affiliated with or endorsed by Anthropic._
 
+## Source and issues
+
+Source code: <https://github.com/InvariantNode/quickquestion-for-claude>. Bug reports and feature requests go to the
+[issue tracker](https://github.com/InvariantNode/quickquestion-for-claude/issues).
+
 ## License
 
 [MIT](LICENSE).

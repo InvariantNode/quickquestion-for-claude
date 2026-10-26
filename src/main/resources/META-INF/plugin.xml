@@ -1,7 +1,7 @@
 <idea-plugin>
-    <id>quickquestion.claude</id>
+    <id>io.github.invariantnode.quickquestion</id>
     <name>QuickQuestion for Claude</name>
-    <vendor>TBD</vendor>
+    <vendor url="https://github.com/InvariantNode">Rishi_</vendor>
 
     <description><![CDATA[
         <p>Select code in the editor and ask Claude a quick question about it, without leaving your file.</p>
@@ -26,15 +26,15 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable parentId="tools" instance="com.example.qqclaudecode.QQConfigurable"
-                                 id="quickquestion.claude.settings" displayName="QuickQuestion for Claude"/>
+        <applicationConfigurable parentId="tools" instance="io.github.invariantnode.quickquestion.QQConfigurable"
+                                 id="io.github.invariantnode.quickquestion.settings" displayName="QuickQuestion for Claude"/>
         <toolWindow id="QuickQuestion for Claude" anchor="right" canCloseContents="true" icon="/icons/ask.svg"
-                    factoryClass="com.example.qqclaudecode.ChatToolWindowFactory" doNotActivateOnStart="true"/>
+                    factoryClass="io.github.invariantnode.quickquestion.ChatToolWindowFactory" doNotActivateOnStart="true"/>
         <notificationGroup id="QuickQuestion for Claude" displayType="BALLOON"/>
     </extensions>
 
     <actions>
-        <action id="QuickQuestion.Ask" class="com.example.qqclaudecode.AskClaudeAction"
+        <action id="QuickQuestion.Ask" class="io.github.invariantnode.quickquestion.AskClaudeAction"
                 text="Ask Claude" description="Ask Claude about the selected code" icon="/icons/ask.svg">
             <add-to-group group-id="Floating.CodeToolbar" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>

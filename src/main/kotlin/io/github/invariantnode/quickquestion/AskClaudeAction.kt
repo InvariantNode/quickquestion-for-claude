@@ -1,4 +1,4 @@
-package com.example.qqclaudecode
+package io.github.invariantnode.quickquestion
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction

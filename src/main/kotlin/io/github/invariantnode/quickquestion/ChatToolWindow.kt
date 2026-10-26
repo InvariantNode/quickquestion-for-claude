@@ -1,4 +1,4 @@
-package com.example.qqclaudecode
+package io.github.invariantnode.quickquestion
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service

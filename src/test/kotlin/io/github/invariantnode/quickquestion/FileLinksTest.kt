@@ -1,4 +1,4 @@
-package com.example.qqclaudecode
+package io.github.invariantnode.quickquestion
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

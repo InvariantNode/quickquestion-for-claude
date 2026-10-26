@@ -1,4 +1,4 @@
-package com.example.qqclaudecode
+package io.github.invariantnode.quickquestion
 
 import com.intellij.markdown.utils.doc.DocMarkdownToHtmlConverter
 import com.intellij.openapi.application.runReadActionBlocking

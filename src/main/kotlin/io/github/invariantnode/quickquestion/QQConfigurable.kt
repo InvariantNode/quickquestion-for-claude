@@ -1,4 +1,4 @@
-package com.example.qqclaudecode
+package io.github.invariantnode.quickquestion
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.BoundSearchableConfigurable
@@ -7,7 +7,7 @@ import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.AlignX
 
-class QQConfigurable : BoundSearchableConfigurable("QuickQuestion for Claude", "quickquestion.claude.settings") {
+class QQConfigurable : BoundSearchableConfigurable("QuickQuestion for Claude", "io.github.invariantnode.quickquestion.settings") {
     override fun createPanel(): DialogPanel {
         val settings = QQSettings.getInstance()
         return panel {

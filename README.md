@@ -35,7 +35,6 @@ stdin; sessions are never persisted, continued or resumed, so nothing shows up i
 
 Kotlin, Gradle wrapper, IntelliJ Platform Gradle Plugin 2.x, JDK 21 toolchain. Gson is bundled.
 
-## Before publishing
+## License
 
-The plugin ID (`quickquestion.claude`), vendor (`TBD`) and license are placeholders. Choose them deliberately: the ID is
-permanent once published.
+[MIT](LICENSE).

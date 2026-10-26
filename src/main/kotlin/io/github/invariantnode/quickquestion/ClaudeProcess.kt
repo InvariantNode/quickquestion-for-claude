@@ -1,4 +1,4 @@
-package com.example.qqclaudecode
+package io.github.invariantnode.quickquestion
 
 import com.google.gson.JsonObject
 import com.intellij.execution.configurations.GeneralCommandLine

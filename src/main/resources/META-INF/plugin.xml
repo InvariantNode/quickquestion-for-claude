@@ -14,7 +14,10 @@
         <p><b>Requirements:</b> the <a href="https://docs.claude.com/en/docs/claude-code">Claude Code CLI</a> must be installed and
         signed in. The plugin starts it in headless mode, one process per chat.</p>
         <p><b>Data:</b> the selected code and your questions are sent to Anthropic through the Claude Code CLI.
-        Claude can also read other files in the project (read-only: Read, Grep, Glob) to answer.</p>
+        Claude can also read other files in the project (read-only: Read, Grep, Glob) to answer, so keep secrets out of
+        files you do not want it to see. The plugin itself collects no telemetry.</p>
+        <p><i>QuickQuestion for Claude is an independent, unofficial plugin. It is not affiliated with, endorsed by, or
+        sponsored by Anthropic. Claude is a trademark of Anthropic.</i></p>
     ]]></description>
 
     <change-notes><![CDATA[

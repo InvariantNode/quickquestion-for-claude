@@ -1,3 +1,4 @@
+import java.io.File
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 
 plugins {
@@ -32,9 +33,19 @@ intellijPlatform {
             untilBuild = provider { null }
         }
     }
+    // Secrets come from the environment, never from the repo. See README "Releasing".
+    signing {
+        certificateChainFile = layout.file(providers.environmentVariable("QQ_CERTIFICATE_CHAIN_FILE").map { File(it) })
+        privateKeyFile = layout.file(providers.environmentVariable("QQ_PRIVATE_KEY_FILE").map { File(it) })
+        password = providers.environmentVariable("QQ_PRIVATE_KEY_PASSWORD")
+    }
+    publishing {
+        token = providers.environmentVariable("QQ_PUBLISH_TOKEN")
+    }
     pluginVerification {
         ides {
             create(IntelliJPlatformType.IntellijIdea, providers.gradleProperty("platformVersion").get())
+            create(IntelliJPlatformType.IntellijIdea, providers.gradleProperty("latestPlatformVersion").get())
         }
     }
 }

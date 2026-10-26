@@ -35,6 +35,25 @@ stdin; sessions are never persisted, continued or resumed, so nothing shows up i
 
 Kotlin, Gradle wrapper, IntelliJ Platform Gradle Plugin 2.x, JDK 21 toolchain. Gson is bundled.
 
+## Releasing
+
+Secrets are read from environment variables and never stored in the repo:
+
+| Variable | Meaning |
+|---|---|
+| `QQ_CERTIFICATE_CHAIN_FILE` | Path to the signing certificate chain (`chain.crt`) |
+| `QQ_PRIVATE_KEY_FILE` | Path to the unencrypted private key (`private.pem`) |
+| `QQ_PRIVATE_KEY_PASSWORD` | Key password (can be anything for an unencrypted key) |
+| `QQ_PUBLISH_TOKEN` | JetBrains Marketplace token, only for `publishPlugin` |
+
+```bash
+./gradlew buildPlugin verifyPlugin signPlugin   # signed zip in build/distributions
+```
+
+The first upload to the Marketplace is done by hand on the plugin site; later releases can use `publishPlugin`.
+
+_Independent plugin, not affiliated with or endorsed by Anthropic._
+
 ## License
 
 [MIT](LICENSE).

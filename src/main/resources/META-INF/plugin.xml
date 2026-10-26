@@ -9,6 +9,7 @@
             <li><b>Ask Claude</b> from the floating code toolbar, the editor context menu, or <code>Ctrl+Alt+K</code>.</li>
             <li>A movable, resizable popup holds a throwaway multi-turn chat that stays open while you read the code.</li>
             <li>Move the live chat to a sidebar tab with one click.</li>
+            <li>Select different code while a chat is open and it is included with your next message.</li>
             <li>Streamed Markdown replies with syntax-highlighted code; <code>Foo.kt:42</code> style references open the file at that line.</li>
         </ul>
         <p><b>Requirements:</b> the <a href="https://docs.claude.com/en/docs/claude-code">Claude Code CLI</a> must be installed and
@@ -22,6 +23,7 @@
 
     <change-notes><![CDATA[
         <ul>
+            <li>0.1.2: An open chat now follows the editor selection. New code you select is included with your next message, and Ask Claude on an open sidebar chat points it at the new selection.</li>
             <li>0.1.1: New plugin icon that matches the in-IDE icon.</li>
             <li>0.1.0: Initial version. Ask Claude about selected code in a popup, move the chat to a sidebar tab.</li>
         </ul>

@@ -3,6 +3,9 @@ package io.github.invariantnode.quickquestion
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
+import com.intellij.ui.JBColor
+import com.intellij.ui.components.ActionLink
+import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextArea
 import com.intellij.util.ui.HTMLEditorKitBuilder
@@ -30,6 +33,7 @@ import javax.swing.text.DefaultEditorKit
 class ChatPanel(
     private val project: Project,
     val session: ChatSession,
+    initialSelection: SelectionContext?,
 ) : JPanel(BorderLayout()), Disposable {
 
     private val transcript = JEditorPane().apply {
@@ -67,18 +71,66 @@ class ChatPanel(
 
     private var disposed = false
 
+    /** The selection the next message will carry, if it differs from what was already sent. */
+    private val selectionLabel = JBLabel().apply { foreground = JBColor.GRAY }
+    private val toggleLink = ActionLink("Exclude") {
+        excluded = !excluded
+        updateSelectionBar()
+    }
+    private val selectionBar = JPanel(BorderLayout(JBUI.scale(8), 0)).apply {
+        border = JBUI.Borders.empty(2, 8)
+        add(selectionLabel, BorderLayout.CENTER)
+        add(toggleLink, BorderLayout.EAST)
+        isVisible = false
+    }
+    private var excluded = false
+
+    private val tracker = SelectionTracker(project, initialSelection) {
+        excluded = false
+        updateSelectionBar()
+    }
+
     init {
+        Disposer.register(this, tracker)
         installKeys()
         add(scroll, BorderLayout.CENTER)
         add(
-            JBScrollPane(input).apply {
+            JPanel(BorderLayout()).apply {
+                add(selectionBar, BorderLayout.NORTH)
+                add(
+                    JBScrollPane(input).apply {
+                        border = JBUI.Borders.empty()
+                        horizontalScrollBarPolicy = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+                    },
+                    BorderLayout.CENTER,
+                )
                 border = JBUI.Borders.customLine(JBUI.CurrentTheme.Popup.separatorColor(), 1, 0, 0, 0)
-                horizontalScrollBarPolicy = ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
             },
             BorderLayout.SOUTH,
         )
-        session.onChange = { scheduleRender() }
+        session.onChange = {
+            updateSelectionBar()
+            scheduleRender()
+        }
+        updateSelectionBar()
         renderNow()
+    }
+
+    /** Points the chat at [selection], for example when "Ask Claude" is invoked while this chat is open. */
+    fun useSelection(selection: SelectionContext) = tracker.set(selection)
+
+    private fun pendingSelection(): SelectionContext? =
+        tracker.current?.takeIf { it.fencedBlock != session.lastSentBlock }
+
+    private fun updateSelectionBar() {
+        val pending = pendingSelection()
+        selectionBar.isVisible = pending != null
+        if (pending != null) {
+            val text = "${if (pending.isMultiLine) "Selected Lines" else "Selected Line"} ${pending.label}"
+            selectionLabel.text = if (excluded) "$text (not included)" else text
+            toggleLink.text = if (excluded) "Include" else "Exclude"
+        }
+        selectionBar.revalidate()
     }
 
     val inputComponent: JComponent get() = input
@@ -99,7 +151,11 @@ class ChatPanel(
         val text = input.text.trim()
         if (text.isEmpty() || !session.canSend) return
         input.text = ""
-        session.send(text)
+        val selection = if (excluded) null else tracker.current
+        session.send(text, selection)
+        // An excluded selection stays unsent; offer it again for the message after next.
+        excluded = false
+        updateSelectionBar()
     }
 
     private fun scheduleRender() {

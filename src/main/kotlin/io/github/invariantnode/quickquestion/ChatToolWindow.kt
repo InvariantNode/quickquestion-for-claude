@@ -45,6 +45,14 @@ class ChatToolWindowFactory : ToolWindowFactory, DumbAware {
 object ChatToolWindow {
     const val ID = "QuickQuestion for Claude"
 
+    /** The chat in the selected sidebar tab, if there is one. */
+    fun activeChat(project: Project): Pair<ToolWindow, ChatPanel>? {
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(ID) ?: return null
+        if (!toolWindow.isAvailable) return null
+        val panel = toolWindow.contentManager.selectedContent?.component as? ChatPanel ?: return null
+        return toolWindow to panel
+    }
+
     /** Takes over [panel]: from here on a tab disposes it, through the content's disposer. */
     fun adopt(project: Project, panel: ChatPanel, title: String) {
         val toolWindow = ToolWindowManager.getInstance(project).getToolWindow(ID) ?: return

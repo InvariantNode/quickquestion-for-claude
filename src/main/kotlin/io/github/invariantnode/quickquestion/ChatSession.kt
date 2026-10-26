@@ -25,8 +25,6 @@ sealed class Part {
  */
 class ChatSession(
     private val project: Project,
-    /** The selection as a fenced code block, sent together with the first question. */
-    private val selectionBlock: String?,
     val title: String,
 ) : Disposable {
     val parts = ArrayList<Part>()
@@ -42,7 +40,10 @@ class ChatSession(
 
     private var process: ClaudeProcess? = null
     private var disposed = false
-    private var firstMessageSent = false
+
+    /** The selection block most recently sent to Claude, so an unchanged selection is not repeated. */
+    var lastSentBlock: String? = null
+        private set
     private var turnGotText = false
 
     /** Starts the process when the popup opens, off the EDT. */
@@ -75,11 +76,12 @@ class ChatSession(
 
     val canSend: Boolean get() = !busy && process != null
 
-    fun send(question: String) {
+    /** [selection] is the editor selection to include; it is only sent when it differs from the last one sent. */
+    fun send(question: String, selection: SelectionContext?) {
         val proc = process ?: return
         if (busy || question.isBlank()) return
-        val text = if (!firstMessageSent && selectionBlock != null) "$selectionBlock\n\n$question" else question
-        firstMessageSent = true
+        val text = MessageComposer.compose(question, selection?.fencedBlock, lastSentBlock)
+        if (selection != null) lastSentBlock = selection.fencedBlock
         finishOpenAssistant()
         parts += Part.User(text)
         busy = true

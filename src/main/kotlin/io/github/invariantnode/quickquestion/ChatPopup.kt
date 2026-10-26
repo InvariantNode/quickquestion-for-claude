@@ -22,8 +22,8 @@ object ChatPopup {
     fun show(project: Project, editor: Editor) {
         val selection = SelectionContext.capture(project, editor) ?: return
 
-        val session = ChatSession(project, selection.fencedBlock, selection.label)
-        val panel = ChatPanel(project, session)
+        val session = ChatSession(project, selection.label)
+        val panel = ChatPanel(project, session, selection)
         Disposer.register(QQProject.getInstance(project), panel)
 
         var moved = false
@@ -75,6 +75,12 @@ object ChatPopup {
 
 /** The selected code as a fenced block: project-relative path, 1-based line range, extension as language. */
 class SelectionContext(val fencedBlock: String, val label: String) {
+    override fun equals(other: Any?) = other is SelectionContext && other.fencedBlock == fencedBlock
+    override fun hashCode() = fencedBlock.hashCode()
+
+    /** True when the label ends in a line range such as `Foo.kt:78-89` rather than a single line. */
+    val isMultiLine: Boolean get() = label.substringAfterLast(':').contains('-')
+
     companion object {
         fun capture(project: Project, editor: Editor): SelectionContext? {
             val model = editor.selectionModel

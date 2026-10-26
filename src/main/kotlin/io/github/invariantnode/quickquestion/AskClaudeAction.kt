@@ -17,6 +17,12 @@ class AskClaudeAction : AnAction(), DumbAware {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return
+        // With a sidebar chat open, point that chat at the new selection instead of opening a second one.
+        ChatToolWindow.activeChat(project)?.let { (toolWindow, chat) ->
+            SelectionContext.capture(project, editor)?.let(chat::useSelection)
+            toolWindow.activate { chat.focusInput() }
+            return
+        }
         ChatPopup.show(project, editor)
     }
 }
